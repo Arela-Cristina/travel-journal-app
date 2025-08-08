@@ -1,30 +1,27 @@
-import { useEffect } from 'react'
-import { supabase } from '../supabase/posts'
+import { usePosts } from '../Context/PostContext';
 
 export default function PostList() {
+    const { posts, loading } = usePosts();
 
-    useEffect(() => {
-        const insertPost = async () => {
-            const newPost = {
-                foto_url: 'https://mi-foto.com/foto.jpg',
-                lugar: 'Barcelona, España',
-                description: 'Fui a la playa 🏖️',
-                mood_state: 'feliz',
-                spend: 30,
-                tags: ['playa', 'verano'],
-            }
-
-            const { data, error } = await supabase
-                .from('posts')
-                .insert([newPost])
-
-            if (error) console.error('Error insertando post:', error)
-            else console.log('Post insertado correctamente:', data)
-        }
-
-        insertPost()
-    }, [])
     return (
-        <div>Lista di Post</div>
-    )
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
+            {loading ? (
+                <p className="col-span-full text-center text-gray-500">Caricamento...</p>
+            ) : (
+                posts.map((post) => (
+                    <div key={post.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                        <img
+                            src={post.foto_url}
+                            alt={post.place}
+                            className="w-full h-[300px] object-cover"
+                        />
+                        <div className="p-4">
+                            <h2 className="text-lg font-semibold mb-2">{post.place}</h2>
+                            <p className="text-gray-600 text-sm">{post.description}</p>
+                        </div>
+                    </div>
+                ))
+            )}
+        </div>
+    );
 }
