@@ -1,4 +1,5 @@
 import { usePosts } from '../Context/PostContext';
+import { Link } from "react-router-dom";
 
 export default function PostList() {
     const { posts, loading } = usePosts();
@@ -9,7 +10,10 @@ export default function PostList() {
                 <p className="col-span-full text-center text-gray-500">Caricamento...</p>
             ) : (
                 posts.map((post) => (
-                    <div key={post.id} className="bg-white shadow-md rounded-lg overflow-hidden">
+                    <Link
+                        to={`/post/${post.id}`}
+                        key={post.id}
+                        className="bg-white shadow-md rounded-lg overflow-hidden">
                         <img
                             src={post.foto_url}
                             alt={post.place}
@@ -19,7 +23,7 @@ export default function PostList() {
                             <h2 className="text-lg font-semibold mb-2">{post.place}</h2>
                             <p className="text-gray-600 text-sm">{post.description}</p>
                         </div>
-                    </div>
+                    </Link>
                 ))
             )}
         </div>
